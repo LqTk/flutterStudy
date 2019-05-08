@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app1/second.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 void main() => runApp(MyApp());
@@ -46,6 +47,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+
+  String selectValue='BJ';
 
   void _incrementCounter() {
     setState(() {
@@ -114,16 +117,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Color.fromARGB(0xff, 0xff, 0, 0),),
                   Icon(Icons.add),
                   Icon(Icons.add),
+                  Icon(Icons.add),
                   //下拉选择框
                   DropdownButton(
                       items: _getItems(),
                       hint: Text('请选择城市'),
                       //下拉菜单选中的值（注意：在初始化时，要么为null，这时显示默认hint的值；
                       // 如果自己设定值，则值必须为列表中的一个值，如果不在列表中，会抛出异常）
-                      value: 'BJ',
+                      value: selectValue,
                       onChanged: (itemValue){
                         setState(() {
                           print("itemValue=$itemValue");
+                          selectValue = itemValue;
                         });
                       }),
                 //图片按钮
@@ -172,6 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
         gravity: ToastGravity.CENTER,
         timeInSecForIos: 1,
     );
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>new Second("second","My Name IS Second!")));
   }
 
   //返回城市列表，写法一
