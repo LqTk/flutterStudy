@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app1/animate/thirdAnimate.dart';
 import 'package:flutter_app1/second.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -117,7 +118,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Color.fromARGB(0xff, 0xff, 0, 0),),
                   Icon(Icons.add),
                   Icon(Icons.add),
-                  Icon(Icons.add),
+                  RaisedButton(
+                      child: Text('第三个页面'),
+                      onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>new ThirdAnimate('第三个动画页面')));
+                  }),
                   //下拉选择框
                   DropdownButton(
                       items: _getItems(),
@@ -177,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
         gravity: ToastGravity.CENTER,
         timeInSecForIos: 1,
     );
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>new Second("second","My Name IS Second!")));
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>new Second("第二个创建页面","My Name IS Second!")));
   }
 
   //返回城市列表，写法一
