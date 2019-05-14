@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app1/animate/thirdAnimate.dart';
+import 'package:flutter_app1/gridView/FourGridView.dart';
 import 'package:flutter_app1/second.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -110,60 +111,80 @@ class _MyHomePageState extends State<MyHomePage> {
               height: 100,
               fit: BoxFit.fitHeight,),
             ),),
-            //横排
-            new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //绝对布局相当于absolute
+            new Stack(
               children: <Widget>[
-                  Icon(Icons.add,
-                    color: Color.fromARGB(0xff, 0xff, 0, 0),),
-                  Icon(Icons.add),
-                  Icon(Icons.add),
-                  RaisedButton(
-                      child: Text('第三个页面'),
-                      onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>new ThirdAnimate('第三个动画页面')));
-                  }),
-                  //下拉选择框
-                  DropdownButton(
-                      items: _getItems(),
-                      hint: Text('请选择城市'),
-                      //下拉菜单选中的值（注意：在初始化时，要么为null，这时显示默认hint的值；
-                      // 如果自己设定值，则值必须为列表中的一个值，如果不在列表中，会抛出异常）
-                      value: selectValue,
-                      onChanged: (itemValue){
-                        setState(() {
-                          print("itemValue=$itemValue");
-                          selectValue = itemValue;
-                        });
-                      }),
-                //图片按钮
-                IconButton(
-                  icon: new Image.asset('img/bg_logo.png'),
-                  onPressed: IconButtonPressed,
-                  tooltip: "long click",
+                //横排Row 竖排Column
+                new Container(
+                  constraints: new BoxConstraints.expand(
+                    height:Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
+                  ),
+                  decoration: new BoxDecoration(
+                    border: new Border.all(width: 2.0, color: Colors.red),
+                    color: Colors.grey,
+                    borderRadius: new BorderRadius.all(new Radius.circular(20.0)),
+                    image: new DecorationImage(
+                      image: new NetworkImage('http://h.hiphotos.baidu.com/zhidao/wh%3D450%2C600/sign=0d023672312ac65c67506e77cec29e27/9f2f070828381f30dea167bbad014c086e06f06c.jpg'),
+//                  image: new AssetImage('img/bg_logo.png'),
+                      centerSlice: new Rect.fromLTRB(270.0, 180.0, 1360.0, 730.0),//拉伸
+                    ),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  alignment: Alignment.center,
+                  child: new Text('Hello World',
+                      style: Theme.of(context).textTheme.display1.copyWith(color: Colors.black)),
+                  transform: new Matrix4.rotationZ(0.3),
+                ),
+                new Center(
+                  child: new Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Icon(Icons.add,
+                        color: Color.fromARGB(0xff, 0xff, 0, 0),),
+                      Icon(Icons.add),
+                      RaisedButton(
+                        child: Text("第四个页面GridView"),
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => new FourGridView()));
+                        },
+                      ),
+                      RaisedButton(
+                          child: Text('第三个页面动画'),
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>new ThirdAnimate('第三个动画页面')));
+                          }),
+                      //下拉选择框
+                      DropdownButton(
+                          items: _getItems(),
+                          hint: Text('请选择城市'),
+                          //下拉菜单选中的值（注意：在初始化时，要么为null，这时显示默认hint的值；
+                          // 如果自己设定值，则值必须为列表中的一个值，如果不在列表中，会抛出异常）
+                          value: selectValue,
+                          onChanged: (itemValue){
+                            setState(() {
+                              print("itemValue=$itemValue");
+                              selectValue = itemValue;
+                            });
+                          }),
+                      Stack(
+                        alignment: Alignment.center,
+                        children: <Widget>[
+                          //图片按钮
+                          IconButton(
+                            icon: new Image.asset('img/bg_logo.png'),
+                            onPressed: IconButtonPressed,
+                            tooltip: "long click",
+                          ),
+                          new Center(
+                            child: Text('第二个页面'),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),
-            new Container(
-              constraints: new BoxConstraints.expand(
-                height:Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
-              ),
-              decoration: new BoxDecoration(
-                border: new Border.all(width: 2.0, color: Colors.red),
-                color: Colors.grey,
-                borderRadius: new BorderRadius.all(new Radius.circular(20.0)),
-                image: new DecorationImage(
-                  image: new NetworkImage('http://h.hiphotos.baidu.com/zhidao/wh%3D450%2C600/sign=0d023672312ac65c67506e77cec29e27/9f2f070828381f30dea167bbad014c086e06f06c.jpg'),
-//                  image: new AssetImage('img/bg_logo.png'),
-                  centerSlice: new Rect.fromLTRB(270.0, 180.0, 1360.0, 730.0),//拉伸
-                ),
-              ),
-              padding: const EdgeInsets.all(8.0),
-              alignment: Alignment.center,
-              child: new Text('Hello World',
-                  style: Theme.of(context).textTheme.display1.copyWith(color: Colors.black)),
-              transform: new Matrix4.rotationZ(0.3),
-            )
 //            new Image.asset('img/bg_logo.png'),
           ],
         ),
