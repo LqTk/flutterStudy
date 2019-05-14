@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app1/animate/thirdAnimate.dart';
 import 'package:flutter_app1/gridView/FourGridView.dart';
 import 'package:flutter_app1/second.dart';
+import 'package:flutter_app1/table/FiveTable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 void main() => runApp(MyApp());
@@ -141,7 +142,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: <Widget>[
                       Icon(Icons.add,
                         color: Color.fromARGB(0xff, 0xff, 0, 0),),
-                      Icon(Icons.add),
+                      RaisedButton(
+                        child: Text('第五个页面Table'),
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>new FiveTable()));
+                        },
+                      ),
                       RaisedButton(
                         child: Text("第四个页面GridView"),
                         onPressed: (){
