@@ -145,19 +145,22 @@ class _MyHomePageState extends State<MyHomePage> {
                       RaisedButton(
                         child: Text('第五个页面Table'),
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>new FiveTable()));
+//                          Navigator.push(context, MaterialPageRoute(builder: (context)=>new FiveTable()));
+                            ToNextPage(new FiveTable());
                         },
                       ),
                       RaisedButton(
                         child: Text("第四个页面GridView"),
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => new FourGridView()));
+//                          Navigator.push(context, MaterialPageRoute(builder: (context) => new FourGridView()));
+                            ToNextPage(new FourGridView());
                         },
                       ),
                       RaisedButton(
                           child: Text('第三个页面动画'),
                           onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>new ThirdAnimate('第三个动画页面')));
+//                            Navigator.push(context, MaterialPageRoute(builder: (context)=>new ThirdAnimate('第三个动画页面')));
+                            ToNextPage(new ThirdAnimate('第三个动画页面'));
                           }),
                       //下拉选择框
                       DropdownButton(
@@ -209,7 +212,38 @@ class _MyHomePageState extends State<MyHomePage> {
         gravity: ToastGravity.CENTER,
         timeInSecForIos: 1,
     );
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>new Second("第二个创建页面","My Name IS Second!")));
+//    Navigator.push(context, MaterialPageRoute(builder: (context)=>new Second("第二个创建页面","My Name IS Second!")));
+    Navigator.of(context)
+    .push(new PageRouteBuilder(
+      opaque: false,
+      pageBuilder: (BuildContext context,_,__){
+        return new Second("第二个创建页面","My Name IS Second!");
+      },
+      transitionsBuilder: (_,Animation<double> animation,__,Widget child){
+        return new FadeTransition(opacity: animation,
+        child: new SlideTransition(position: new Tween<Offset>(
+          begin: const Offset(0.0, 1.0),
+          end: Offset.zero,
+        ).animate(animation),child: child,),);
+      }
+    ));
+  }
+
+  void ToNextPage(StatelessWidget page){
+    Navigator.of(context)
+        .push(new PageRouteBuilder(
+        opaque: false,
+        pageBuilder: (BuildContext context,_,__){
+          return page;
+        },
+        transitionsBuilder: (_,Animation<double> animation,__,Widget child){
+          return new FadeTransition(opacity: animation,
+            child: new SlideTransition(position: new Tween<Offset>(
+              begin: const Offset(0.0, 1.0),
+              end: Offset.zero,
+            ).animate(animation),child: child,),);
+        }
+    ));
   }
 
   //返回城市列表，写法一

@@ -33,12 +33,25 @@ class Third extends StatefulWidget{
 
 }
 
-class ThirdState extends State<Third>{
+class ThirdState extends State<Third> with TickerProviderStateMixin {
 
   String title;
   BuildContext context;
+  AnimationController controller;//动画控制器
+  CurvedAnimation curved;//曲线动画，动画插值
+  Animation<Offset> offset;
+  bool forward = true;
 
   ThirdState(this.title,this.context);
+
+
+  @override
+  void initState() {
+    super.initState();
+    controller = new AnimationController(vsync: this, duration: const Duration(seconds: 3));
+    curved = new CurvedAnimation(parent: controller, curve: Curves.linear);//模仿小球自由落体运动轨迹
+//    controller.forward();//放在这里开启动画，打开页面就播放动画
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,10 +110,52 @@ class ThirdState extends State<Third>{
               transform: Matrix4.rotationY(1),
               child: Text('绕Y轴旋转'),
             ),
+            //滑动动画
+            new SlideTransition(position: new Tween<Offset>(
+              //从左下角滑向右上角
+              begin: const Offset(-1.0, -1.0),
+              end: Offset(1.0,1.0),
+            ).animate(curved),child: FlutterLogo(),),
+            //旋转动画
+            new RotationTransition(turns: curved,
+              child: new FlutterLogo(size: 50.0,),),
+            //大小出现动画
+            new ScaleTransition(
+              scale: curved,
+              child: new Container(
+                margin: EdgeInsets.symmetric(vertical: 10.0),
+                height: 100,
+                width: 100,
+                child: FlutterLogo(size: 50.0,),
+              ),
+            ),
+            //逐步出现动画
+            new SizeTransition(
+              sizeFactor: curved,
+              child: Center(
+                child: new Container(
+                  margin: EdgeInsets.symmetric(vertical: 10.0),
+                  height: 100,
+                  width: 100,
+                  child: FlutterLogo(size: 200.0,),
+                ),
+              ),
+            ),
+
           ],
         )
 
       ),
+      floatingActionButton: new FloatingActionButton(onPressed: (){
+        if(forward){
+          controller.forward();//向前播放动画
+        }else{
+          controller.reverse();//向后播放动画
+        }
+        forward = !forward;
+      },
+      tooltip: '动画',
+      child: new Icon(Icons.track_changes),),
     );
   }
 
