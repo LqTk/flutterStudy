@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app1/animate/thirdAnimate.dart';
 import 'package:flutter_app1/gridView/FourGridView.dart';
+import 'package:flutter_app1/network/netWork.dart';
 import 'package:flutter_app1/second.dart';
 import 'package:flutter_app1/table/FiveTable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -143,6 +144,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       Icon(Icons.add,
                         color: Color.fromARGB(0xff, 0xff, 0, 0),),
                       RaisedButton(
+                        child: Text('第六个页面网络请求'),
+                        onPressed: (){
+//                          Navigator.push(context, MaterialPageRoute(builder: (context)=>new FiveTable()));
+                          ToNextPage(new netWork());
+                        },
+                      ),
+                      RaisedButton(
                         child: Text('第五个页面Table'),
                         onPressed: (){
 //                          Navigator.push(context, MaterialPageRoute(builder: (context)=>new FiveTable()));
@@ -229,6 +237,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ));
   }
 
+  //解决了官方demo里路由跳转效果卡顿的问题
   void ToNextPage(StatelessWidget page){
     Navigator.of(context)
         .push(new PageRouteBuilder(
