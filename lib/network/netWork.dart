@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_app1/network/httpClient.dart';
+import 'package:flutter_app1/sharePreferences/sharePreference.dart';
 
 class netWork extends StatelessWidget{
   @override
@@ -36,8 +37,16 @@ class NetWorkState extends State<NetWorkPage>{
   BuildContext context;
 
   NetWorkState(this.context);
+  sharePreference preference;
   String result;
   httpClient client = new httpClient();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,12 +81,20 @@ class NetWorkState extends State<NetWorkPage>{
 
   void getNetWorkData() {
       client.logoIn('','18408249328','123456');
-      client.updata('app/verUpdate/check/', 'SYN_HEALTH_CONSUMER', 'Android');
+      client.updata('app/verUpdate/check/', 'SYN_HEALTH_CONSUMER');
       client.getUserInfo('users/', '76a7fdf7-8f62-4867-a3d7-aa11299fca63').then((res){
         print(res+',返回的回调结果');
         setState(() {
           result = res;
         });
       });
+  }
+
+  void initData() async{
+    preference = await sharePreference.getInstance();
+    setState(() {
+      result = preference.getString('name');
+      print('$result,preference的name');
+    });
   }
 }

@@ -1,13 +1,12 @@
 import 'package:package_info/package_info.dart';
 // ignore: camel_case_types
 class packageInfo {
-  PackageInfo info;
-  packageInfo() {
-    initInfo();
-  }
+  static PackageInfo info;
+  packageInfo();
 
-  void initInfo() async{
+  static Future<packageInfo> initInfo() async{
     info = await PackageInfo.fromPlatform();
+    return packageInfo();
   }
 
   String getPackAppName(){

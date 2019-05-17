@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app1/animate/thirdAnimate.dart';
+import 'package:flutter_app1/db/ChangeDb.dart';
 import 'package:flutter_app1/gridView/FourGridView.dart';
 import 'package:flutter_app1/network/netWork.dart';
 import 'package:flutter_app1/second.dart';
@@ -143,6 +144,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: <Widget>[
                       Icon(Icons.add,
                         color: Color.fromARGB(0xff, 0xff, 0, 0),),
+                      RaisedButton(
+                        child: Text('数据库操作'),
+                        onPressed: (){
+                          ToNextPage(new ChangeDb());
+                        },
+                      ),
                       RaisedButton(
                         child: Text('第六个页面网络请求'),
                         onPressed: (){
