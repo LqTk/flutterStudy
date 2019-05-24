@@ -1,7 +1,11 @@
 import 'package:dio/dio.dart';
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_app1/ChangePage.dart';
 import 'package:flutter_app1/network/httpClient.dart';
+import 'package:flutter_app1/network/weather/Weather.dart';
+import 'package:flutter_app1/network/weather/WeatherInfo.dart';
 import 'package:flutter_app1/sharePreferences/sharePreference.dart';
 
 class netWork extends StatelessWidget{
@@ -72,7 +76,13 @@ class NetWorkState extends State<NetWorkPage>{
                 getNetWorkData();
               },
               child: Text('点击请求网络数据'),
-            )
+            ),
+            RaisedButton(
+              onPressed: (){
+                new ChangePage().ToNextPage(this.context, new Weather());
+              },
+              child: Text('天气预报'),
+            ),
           ],
         ),
       ),
@@ -80,12 +90,21 @@ class NetWorkState extends State<NetWorkPage>{
   }
 
   void getNetWorkData() {
-      client.logoIn('','18408249328','123456');
+    /*client.logoIn('','18408249328','123456');
       client.updata('app/verUpdate/check/', 'SYN_HEALTH_CONSUMER');
       client.getUserInfo('users/', '76a7fdf7-8f62-4867-a3d7-aa11299fca63').then((res){
         print(res+',返回的回调结果');
         setState(() {
           result = res;
+        });
+      });*/
+      client.getWeaather('weatherApi', '双流').then((res){
+        setState(() {
+//          Map weatherInfo = json.decode(res.body);
+//          var weather = new Weather.fromJson(res.data);
+          var weatherInfo = new WeatherInfo.formJson(res.data);
+          print(weatherInfo.data.toString()+',返回的回调结果');
+          result = weatherInfo.toString();
         });
       });
   }

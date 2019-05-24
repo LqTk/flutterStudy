@@ -28,7 +28,7 @@ class httpClient {
 
   void getInstance(){
     if(dio == null) {
-      dio = new Dio(new BaseOptions(
+      /*dio = new Dio(new BaseOptions(
         baseUrl: 'https://cloud.synwing.com:8443/health_app_v2/',
         connectTimeout: 5000,
         receiveTimeout: 100000,
@@ -39,6 +39,12 @@ class httpClient {
         },
         contentType: ContentType.json,
         responseType: ResponseType.json,
+      ));*/
+      dio = new Dio(new BaseOptions(
+        baseUrl: 'https://www.apiopen.top/',
+        connectTimeout: 5000,
+        receiveTimeout: 100000,
+        responseType: ResponseType.json
       ));
     }
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate  = (client) {
@@ -74,6 +80,12 @@ class httpClient {
     response = await dio.get(url+'$userId');
     print(response.data.toString()+',userInfo结果');
     return response.data.toString();
+  }
+
+  Future<Response> getWeaather(String url,String city) async{
+    print(dio.options.baseUrl+'$url?city=$city');
+    Response response = await dio.get("$url?city=$city");
+    return response;
   }
 
 }
