@@ -1,39 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app1/network/httpClient.dart';
 import 'package:flutter_app1/network/weather/WeatherInfo.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Weather extends StatelessWidget{
+
+  var weatherInfo;
+
+  Weather(this.weatherInfo);
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(
-      title: '天气预报',
+      title: '双流',
       theme: ThemeData(
         primarySwatch: Colors.lightBlue
       ),
-      home: new WeatherPage(context),
+      home: new WeatherPage(context,weatherInfo),
     );
   }
 }
 
 class WeatherPage extends StatefulWidget{
   BuildContext context;
+  var weatherInfo;
 
-  WeatherPage(this.context);
+  WeatherPage(this.context,this.weatherInfo);
 
   @override
   WeatherState createState() {
     // TODO: implement createState
-    return WeatherState(context);
+    return WeatherState(context,weatherInfo);
   }
 
 }
 
 class WeatherState extends State<WeatherPage>{
   BuildContext context;
+  var weatherInfo;
 
-  WeatherState(this.context);
-  String title='天气预报';
+  WeatherState(this.context,this.weatherInfo);
+  String title='双流';
   httpClient client = new httpClient();
   String city;//当前城市
   String nowTemperature='0℃';//当前温度
@@ -41,13 +49,13 @@ class WeatherState extends State<WeatherPage>{
   String highTem='0℃';//最高温度
   String lowTem='0℃';//最低温度
   String type="";
-  var weatherInfo;
+  TextEditingController _cityController = TextEditingController.fromValue(TextEditingValue(text:'双流'));
 
   @override
   void initState() {
     // TODO: implement initState
+//    getWeatherDate('双流');
     super.initState();
-    getWeatherDate();
   }
 
   @override
@@ -66,17 +74,39 @@ class WeatherState extends State<WeatherPage>{
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      controller:_cityController,
+                      decoration: InputDecoration(
+                        hintText: '请输入城市名',
+                      ),
+
+                    ),
+                  ),
+                  RaisedButton(
+                    child: Text('查询'),
+                    onPressed: (){
+                      getWeatherDate(_cityController.text);
+                    },
+                  )
+                ],
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                Text('$nowWeek'),
-                Text('$type'),
-                Text('当前$nowTemperature',
+                Text(weatherInfo.data.forecast[0].date.substring(weatherInfo.data.forecast[0].date.indexOf('星'),weatherInfo.data.forecast[0].date.length)),
+                Text(weatherInfo.data.forecast[0].type),
+                Text('当前'+weatherInfo.data.wendu+'℃',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 18,
                 ),),
-                Text('$lowTem\/$highTem')
+                Text(weatherInfo.data.forecast[0].low.split(' ')[1]+'\/'+weatherInfo.data.forecast[0].high.split(' ')[1])
               ],
             ),
             Table(
@@ -220,18 +250,17 @@ class WeatherState extends State<WeatherPage>{
     );
   }
 
-  void getWeatherDate() {
-    client.getWeaather('weatherApi', '双流').then((res){
+  void getWeatherDate(String city) {
+    client.getWeaather('weatherApi', city).then((res){
       print(res.data.toString()+',返回的回调结果');
       setState(() {
+        _cityController.clear();
         weatherInfo = new WeatherInfo.formJson(res.data);
+        if(weatherInfo.data==null){
+          Fluttertoast.showToast(msg: weatherInfo.msg,toastLength: Toast.LENGTH_SHORT,gravity: ToastGravity.CENTER,);
+        }
         city = weatherInfo.data.city;
         title = city;
-        nowTemperature = weatherInfo.data.wendu+'℃';
-        nowWeek = weatherInfo.data.forecast[0].date.substring(weatherInfo.data.forecast[0].date.indexOf('星'),weatherInfo.data.forecast[0].date.length);
-        highTem = weatherInfo.data.forecast[0].high.split(' ')[1];
-        lowTem = weatherInfo.data.forecast[0].low.split(' ')[1];
-        type = weatherInfo.data.forecast[0].type;
         print('$city当前城市');
       });
     });

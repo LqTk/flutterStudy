@@ -44,6 +44,7 @@ class NetWorkState extends State<NetWorkPage>{
   sharePreference preference;
   String result;
   httpClient client = new httpClient();
+  bool offstage = true;
 
   @override
   void initState() {
@@ -79,9 +80,21 @@ class NetWorkState extends State<NetWorkPage>{
             ),
             RaisedButton(
               onPressed: (){
-                new ChangePage().ToNextPage(this.context, new Weather());
+                setState(() {
+                  offstage=!offstage;
+                });
+                client.getWeaather('weatherApi', '双流').then((res){
+                  setState(() {
+                    offstage=!offstage;
+                    new ChangePage().ToNextPage(this.context, new Weather(new WeatherInfo.formJson(res.data)));
+                  });
+                });
               },
               child: Text('天气预报'),
+            ),
+            Offstage(
+              offstage: offstage,
+              child: Text('加载中...',style: TextStyle(color: Colors.red),),
             ),
           ],
         ),
